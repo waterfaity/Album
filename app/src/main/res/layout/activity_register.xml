@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_login"
+    tools:context="com.waterfairy.album.activity.RegisterActivity">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="back"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="8dp"
+        android:src="@mipmap/back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorMainDeep" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/accounts" />
+
+            <EditText
+                android:id="@+id/account"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="输入帐号"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorGray"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorMainDeep" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/password" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="输入密码"
+                android:inputType="textPassword"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorGray"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorMainDeep" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/password" />
+
+            <EditText
+                android:id="@+id/ensure_password"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="确认密码"
+                android:inputType="textPassword"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorGray"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorMainDeep" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:onClick="register"
+            android:text="注册" />
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorGray">#888888</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorActionBar">#31435B</color>
+    <color name="colorLogin">#11b6b3</color>
+    <color name="colorMain">#11b6b3</color>
+    <color name="colorMainLight">#3ae6e2</color>
+    <color name="colorMainDeep">#1e807d</color>
+    <color name="colorTextBlack">#515151</color>
+    <color name="colorTextBlackLight">#686868</color>
+    <color name="colorDivider">#555555</color>
+    <color name="colorBgDialog">#303F9F</color>
+    <color name="colorWeekSelect">#EE4081</color>
+    <color name="colorWeek">#888888</color>
+</resources>

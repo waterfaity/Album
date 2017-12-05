@@ -53,19 +53,16 @@ public abstract class BaseCallback<T> implements retrofit2.Callback<T> {
                 baseResponse = (BaseResponse) body;
             }
             if (baseResponse != null) {
-                switch (baseResponse.getResultCode()) {
+                switch (baseResponse.getCode()) {
                     case HttpResultCode.HTTP_RESULT_OK:
                         onSuccess(response.body());
                         break;
                     case HttpResultCode.HTTP_RESULT_NO_DATA:
                         String message = baseResponse.getMessage();
-                        showMessage = TextUtils.isEmpty(message) ? "没有数据" : message;
-                        onFailed(Integer.parseInt(HttpResultCode.HTTP_RESULT_NO_DATA), showMessage);
+                        showMessage = TextUtils.isEmpty(message) ? "错误" : message;
+                        onFailed(HttpResultCode.HTTP_RESULT_NO_DATA, showMessage);
                         break;
-                    case HttpResultCode.HTTP_RESULT_ERROR:
-                        showMessage = baseResponse.getMessage();
-                        onFailed(Integer.parseInt(HttpResultCode.HTTP_RESULT_ERROR), showMessage);
-                        break;
+
                 }
             } else {
                 onSuccess(response.body());

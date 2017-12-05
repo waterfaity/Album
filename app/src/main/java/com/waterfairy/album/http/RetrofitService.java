@@ -7,7 +7,9 @@ import java.security.PublicKey;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * @author water_fairy
@@ -17,9 +19,13 @@ import retrofit2.http.POST;
  */
 
 public interface RetrofitService {
-    @POST("login")
-    @FormUrlEncoded
-    Call<BaseResponse> login(
-            @Field("userName") String userName,
-            @Field("password") String password);
+    @GET("login")
+    Call<BaseResponse> login(@Query("userName") String userName,
+                             @Query("userPwd") String passWord);
+
+
+    @GET("regist")
+    Call<BaseResponse> regist(@Query("userName") String userName,
+                              @Query("userPwd") String passWord,
+                              @Query("tel") String tel);
 }

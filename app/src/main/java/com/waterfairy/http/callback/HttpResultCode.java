@@ -8,8 +8,8 @@ package com.waterfairy.http.callback;
  */
 
 public class HttpResultCode {
-    public final static String HTTP_RESULT_OK = "0";
-    public final static String HTTP_RESULT_NO_DATA = "1";
-    public final static String HTTP_RESULT_ERROR = "-1";
+    public final static int HTTP_RESULT_OK = 1;
+    public final static int HTTP_RESULT_NO_DATA = 0;
+    public final static int HTTP_RESULT_ERROR = 0;
 
 }

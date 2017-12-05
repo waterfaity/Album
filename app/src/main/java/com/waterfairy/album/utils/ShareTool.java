@@ -15,7 +15,8 @@ import com.waterfairy.album.application.MyApp;
 public class ShareTool {
     private static ShareTool shareTool;
     public static final String IS_LOGIN = "isLogin";
-    public static final String ACCOUNT = "accounts";
+    public static final String ACCOUNT = "account";
+    public static final String PASSWORD = "password";
     public static final String SETTING = "setting";
     private SharedPreferences sharedPreferences;
 
@@ -54,7 +55,14 @@ public class ShareTool {
         saveLogin(true);
     }
 
+    public void savePassword(String password) {
+        sharedPreferences.edit().putString(PASSWORD, password).apply();
+    }
+
     public String getAccount() {
         return sharedPreferences.getString(ACCOUNT, "");
+    }
+    public String getPassword() {
+        return sharedPreferences.getString(PASSWORD, "");
     }
 }

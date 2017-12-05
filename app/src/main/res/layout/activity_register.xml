@@ -10,9 +10,9 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:onClick="back"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
+        android:onClick="back"
         android:padding="8dp"
         android:src="@mipmap/back" />
 
@@ -35,18 +35,19 @@
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/accounts" />
+            <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:src="@mipmap/accounts" />-->
 
             <EditText
-                android:id="@+id/account"
+                android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:hint="输入帐号"
+                android:text="water_fairy"
                 android:maxLength="12"
                 android:singleLine="true"
                 android:textColor="@color/colorWhite"
@@ -64,15 +65,47 @@
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/password" />
+            <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:src="@mipmap/accounts" />-->
+
+            <EditText
+                android:id="@+id/account"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="输入手机号"
+                android:text="13764312271"
+                android:inputType="number"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorGray"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorMainDeep" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical">
+
+            <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:src="@mipmap/password" />-->
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:text="123456"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:hint="输入密码"
@@ -94,15 +127,16 @@
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/password" />
+            <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:src="@mipmap/password" />-->
 
             <EditText
                 android:id="@+id/ensure_password"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:text="123456"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:hint="确认密码"

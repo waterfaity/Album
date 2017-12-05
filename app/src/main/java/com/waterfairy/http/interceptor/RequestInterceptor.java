@@ -20,7 +20,7 @@ import okhttp3.Response;
  * 995637517@qq.com
  */
 
-public abstract class RequestInterceptor implements Interceptor {
+public class RequestInterceptor implements Interceptor {
     HashMap<String, String> params;
     protected boolean showUrl;
 
@@ -39,7 +39,7 @@ public abstract class RequestInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        if (params != null && params.size() > 0) {
+//        if (params != null && params.size() > 0) {
             Request newRequest = null;
             RequestBody body = request.body();
             HttpUrl url = request.url();
@@ -62,8 +62,8 @@ public abstract class RequestInterceptor implements Interceptor {
                     .method(request.method(), body)
                     .build();
             return chain.proceed(newRequest);
-        }
-        return chain.proceed(request);
+//        }
+//        return chain.proceed(request);
     }
 
     private void showUrl(HttpUrl url, RequestBody body) {
@@ -96,12 +96,15 @@ public abstract class RequestInterceptor implements Interceptor {
         String oriUrl = url.toString();
         StringBuilder stringBuilder = new StringBuilder(oriUrl);
         HashMap<String, String> tempParams = new HashMap<>();
-        Set<String> strings = params.keySet();
-        for (String key : strings) {
-            String value = params.get(key);
-            stringBuilder.append("&").append(key).append("=").append(value);
-            tempParams.put(key, value);
+        if (params != null && params.size() > 0) {
+            Set<String> strings = params.keySet();
+            for (String key : strings) {
+                String value = params.get(key);
+                stringBuilder.append("&").append(key).append("=").append(value);
+                tempParams.put(key, value);
+            }
         }
+
         Set<String> strings2 = url.queryParameterNames();
         for (String key : strings2) {
             String value = url.queryParameter(key);
@@ -121,11 +124,13 @@ public abstract class RequestInterceptor implements Interceptor {
         HashMap<String, String> tempParams = new HashMap<>();
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-        Set<String> strings = params.keySet();
-        for (String key : strings) {
-            String value = params.get(key);
-            builder.addFormDataPart(key, value);
-            tempParams.put(key, value);
+        if (params != null && params.size() > 0) {
+            Set<String> strings = params.keySet();
+            for (String key : strings) {
+                String value = params.get(key);
+                builder.addFormDataPart(key, value);
+                tempParams.put(key, value);
+            }
         }
         for (int i = 0; i < multipartBody.size(); i++) {
             builder.addPart(multipartBody.part(i));
@@ -144,15 +149,17 @@ public abstract class RequestInterceptor implements Interceptor {
     private FormBody addParamsToFormBody(FormBody formBody) {
         HashMap<String, String> tempParams = new HashMap<>();
         FormBody.Builder builder = new FormBody.Builder();
-        Set<String> strings = params.keySet();
-        for (String key : strings) {
-            String value = params.get(key);
-            if (!TextUtils.isEmpty(value)) {
-                builder.add(key, value);
-                tempParams.put(key, value);
+        if (params != null && params.size() > 0) {
+            Set<String> strings = params.keySet();
+            for (String key : strings) {
+                String value = params.get(key);
+                if (!TextUtils.isEmpty(value)) {
+                    builder.add(key, value);
+                    tempParams.put(key, value);
+                }
             }
-
         }
+
         for (int i = 0; i < formBody.size(); i++) {
             String value = formBody.value(i);
             if (!TextUtils.isEmpty(value)) {
@@ -169,10 +176,19 @@ public abstract class RequestInterceptor implements Interceptor {
         this.params = params;
     }
 
-    abstract void putExtraParamsToUrl(StringBuilder stringBuilder, HashMap<String, String> tempParams);
+    protected void putExtraParamsToUrl(StringBuilder stringBuilder, HashMap<String, String> tempParams) {
 
-    abstract void putExtraParamsToFromBody(FormBody.Builder builder, HashMap<String, String> tempParams);
+    }
 
-    abstract void putExtraParamsToMulFormBody(MultipartBody.Builder builder, HashMap<String, String> tempParams);
+
+    protected void putExtraParamsToFromBody(FormBody.Builder builder, HashMap<String, String> tempParams) {
+
+    }
+
+
+    protected void putExtraParamsToMulFormBody(MultipartBody.Builder builder, HashMap<String, String> tempParams) {
+
+    }
+
 
 }

@@ -18,10 +18,13 @@ public class RetrofitHttpClient {
     private Retrofit retrofit;
     private RequestInterceptor requestInterceptor;
 
-    private RetrofitHttpClient(String baseUrl, boolean hasGson) {
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-//                .addInterceptor(requestInterceptor)
-                .build();
+    private RetrofitHttpClient(String baseUrl, boolean hasGson, boolean showUrl) {
+
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        if (showUrl) {
+            builder.addInterceptor(new RequestInterceptor(true));
+        }
+        OkHttpClient okHttpClient = builder.build();
         Retrofit.Builder client = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient);
@@ -33,7 +36,6 @@ public class RetrofitHttpClient {
 
     private RetrofitHttpClient(String baseUrl) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-//                .addInterceptor(requestInterceptor)
                 .build();
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -46,8 +48,8 @@ public class RetrofitHttpClient {
         return new RetrofitHttpClient(baseUrl);
     }
 
-    public static RetrofitHttpClient build(String baseUrl, boolean hasGson) {
-        return new RetrofitHttpClient(baseUrl, hasGson);
+    public static RetrofitHttpClient build(String baseUrl, boolean hasGson, boolean showUrl) {
+        return new RetrofitHttpClient(baseUrl, hasGson, showUrl);
     }
 
     /**

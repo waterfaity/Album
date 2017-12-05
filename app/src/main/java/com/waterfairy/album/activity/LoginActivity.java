@@ -8,24 +8,35 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.waterfairy.album.R;
-import com.waterfairy.album.database.UserDB;
 import com.waterfairy.album.database.greendao.UserDBDao;
+import com.waterfairy.album.http.HttpConfig;
+import com.waterfairy.album.http.RetrofitService;
 import com.waterfairy.album.manger.DataBaseManger;
+import com.waterfairy.album.utils.ShareTool;
+import com.waterfairy.http.callback.BaseCallback;
+import com.waterfairy.http.client.RetrofitHttpClient;
+import com.waterfairy.http.response.BaseResponse;
 import com.waterfairy.utils.ToastUtils;
-
-import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
-
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private UserDBDao userDBDao;
+    private TextView tvAccount, tvPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initView();
         initData();
+    }
+
+    private void initView() {
+        tvAccount = findViewById(R.id.account);
+        tvPassword = findViewById(R.id.password);
+        String account = ShareTool.getInstance().getAccount();
+        String password = ShareTool.getInstance().getPassword();
+        tvAccount.setText(account);
+        tvPassword.setText(password);
     }
 
     private void initData() {
@@ -34,30 +45,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        String account = ((TextView) findViewById(R.id.account)).getText().toString();
-        String password = ((TextView) findViewById(R.id.password)).getText().toString();
+        final String account = ((TextView) findViewById(R.id.account)).getText().toString();
+        final String password = ((TextView) findViewById(R.id.password)).getText().toString();
         if (TextUtils.isEmpty(account)) {
-            ToastUtils.show("请输入账号");
+            ToastUtils.show("请输入帐号");
             return;
         }
         if (TextUtils.isEmpty(password)) {
             ToastUtils.show("请输入密码");
             return;
         }
+        RetrofitHttpClient.build(HttpConfig.BASE_URL, true, true)
+                .getRetrofit().create(RetrofitService.class)
+                .login(account, password).enqueue(new BaseCallback<BaseResponse>() {
+            @Override
+            public void onSuccess(BaseResponse baseResponse) {
+                ToastUtils.show("登录成功");
+                ShareTool.getInstance().saveAccount(account);
+                ShareTool.getInstance().savePassword(password);
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                finish();
+            }
 
-//        List<UserDB> list = userDBDao.queryBuilder()
-//                .where(UserDBDao.Properties.Account.eq(account))
-//                .list();
-//        if (list != null && list.size() > 0) {
-//            if (TextUtils.equals(password, list.get(0).getPassword())) {
-//                startActivity(new Intent(this, HomeActivity.class));
-//                finish();
-//            } else {
-//                ToastUtils.show("密码不正确");
-//            }
-//        } else {
-//            ToastUtils.show("该账号不存在");
-//        }
+            @Override
+            public void onFailed(int code, String message) {
+                ToastUtils.show(message);
+            }
+        });
     }
 
     public void register(View view) {

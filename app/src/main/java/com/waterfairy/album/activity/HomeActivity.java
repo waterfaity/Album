@@ -16,24 +16,30 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.waterfairy.album.R;
+import com.waterfairy.album.http.HttpConfig;
+import com.waterfairy.album.http.RetrofitService;
+import com.waterfairy.album.utils.ShareTool;
+import com.waterfairy.http.client.RetrofitHttpClient;
+import com.waterfairy.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     List<String> strings = new ArrayList<>();
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         for (int i = 0; i < 100; i++) {
             strings.add("hhh" + i);
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(adapter);
         findViewById(R.id.fab).setOnClickListener(this);
     }
 
@@ -59,14 +65,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     };
 
 
+    private void queryPhoto() {
+        long userId = ShareTool.getInstance().getUserId();
+        if (userId == 0) {
+            ToastUtils.show("用户未登录,请重新登录");
+            return;
+        }
+        RetrofitService retrofitService = RetrofitHttpClient.build(HttpConfig.BASE_URL).getRetrofit().create(RetrofitService.class);
+        retrofitService.queryPhoto(userId);
+
+    }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fab) {
             startActivity(new Intent(this, SelectFileActivity.class));
-        }else if (v.getId()==R.id.quit){
-           startActivity(new Intent(this,LoginActivity.class));
-           finish();
+        } else if (v.getId() == R.id.quit) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
     }
 }

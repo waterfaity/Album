@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.waterfairy.album.R;
+import com.waterfairy.album.bean.UserBean;
 import com.waterfairy.album.database.greendao.UserDBDao;
 import com.waterfairy.album.http.HttpConfig;
 import com.waterfairy.album.http.RetrofitService;
@@ -57,12 +58,14 @@ public class LoginActivity extends AppCompatActivity {
         }
         RetrofitHttpClient.build(HttpConfig.BASE_URL, true, true)
                 .getRetrofit().create(RetrofitService.class)
-                .login(account, password).enqueue(new BaseCallback<BaseResponse>() {
+                .login(account, password).enqueue(new BaseCallback<BaseResponse<UserBean>>() {
             @Override
-            public void onSuccess(BaseResponse baseResponse) {
+            public void onSuccess(BaseResponse<UserBean> baseResponse) {
                 ToastUtils.show("登录成功");
+                UserBean data = baseResponse.getData();
                 ShareTool.getInstance().saveAccount(account);
                 ShareTool.getInstance().savePassword(password);
+                ShareTool.getInstance().saveUserId(data.getId());
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
             }

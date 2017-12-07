@@ -1,5 +1,6 @@
 package com.waterfairy.album.http;
 
+import com.waterfairy.album.bean.UserBean;
 import com.waterfairy.http.response.BaseResponse;
 
 import java.security.PublicKey;
@@ -24,8 +25,8 @@ import retrofit2.http.Query;
 
 public interface RetrofitService {
     @GET("login")
-    Call<BaseResponse> login(@Query("userName") String userName,
-                             @Query("userPwd") String passWord);
+    Call<BaseResponse<UserBean>> login(@Query("userName") String userName,
+                                       @Query("userPwd") String passWord);
 
 
     @GET("regist")

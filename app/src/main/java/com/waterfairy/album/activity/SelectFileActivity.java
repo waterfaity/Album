@@ -1,9 +1,9 @@
 package com.waterfairy.album.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,9 +11,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,9 +24,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.waterfairy.album.R;
 import com.waterfairy.utils.PictureSearchTool;
+import com.waterfairy.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SelectFileActivity extends AppCompatActivity implements PictureSearchTool.OnSearchListener, View.OnClickListener {
@@ -36,25 +41,33 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
     private ImageView back, refresh;
     private int currentDeep;
     private List<String> deepList;
-    private List<PictureSearchTool.ImgBean> imgList;
+    private List<PictureSearchTool.ImgBean> imgPathList;
+    private List<PictureSearchTool.ImgBean> dataList;
     private int widthImg;
+    private boolean isPath = true;
+    private TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_file);
+        mTitle = findViewById(R.id.title);
         pictureSearchTool = PictureSearchTool.getInstance();
         pictureSearchTool.setDeep(3);
         pictureSearchTool.setOnSearchListener(this);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         back = findViewById(R.id.back);
-        refresh = findViewById(R.id.refresh);
+        refresh = findViewById(R.id.upload);
         back.setOnClickListener(this);
         refresh.setOnClickListener(this);
         deepList = new ArrayList<>();
-        imgList = new ArrayList<>();
+        imgPathList = new ArrayList<>();
         widthImg = getResources().getDisplayMetrics().widthPixels / 3;
+
+        //搜索
+        showSearchDialog();
+        pictureSearchTool.start();
 
     }
 
@@ -85,7 +98,10 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
 
     @Override
     public void onSearchSuccess(List<PictureSearchTool.ImgBean> fileList) {
-        imgList = fileList;
+        isPath = true;
+        imgPathList = fileList;
+        dataList = new ArrayList<>();
+        dataList.addAll(imgPathList);
         dialog.dismiss();
         recyclerView.setAdapter(adapter);
     }
@@ -94,15 +110,28 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                if (currentDeep == 0) finish();
+                if (isPath) finish();
+                else {
+                    isPath = true;
+                    dataList.removeAll(dataList);
+                    dataList.addAll(imgPathList);
+                    adapter.notifyDataSetChanged();
+                }
                 break;
-            case R.id.refresh:
-                showSearchDialog();
-                pictureSearchTool.start();
+            case R.id.upload:
+                upload();
                 break;
         }
     }
 
+    private void upload() {
+        if (selectHashMap.size() == 0) ToastUtils.show("还没有选择图片");
+        else {
+
+        }
+    }
+
+    private HashMap<Integer, Boolean> selectHashMap = new HashMap<>();
     private RecyclerView.Adapter adapter = new RecyclerView.Adapter() {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -113,28 +142,91 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             RelativeLayout rootView = holder.itemView.findViewById(R.id.root_view);
             ViewGroup.LayoutParams layoutParams = rootView.getLayoutParams();
+            CheckBox checkBox = rootView.findViewById(R.id.checkbox);
             layoutParams.width = widthImg;
             layoutParams.height = widthImg;
             rootView.setLayoutParams(layoutParams);
 
 
-            PictureSearchTool.ImgBean imgBean = imgList.get(position);
-            ImageView imageView = rootView.findViewById(R.id.image);
-            TextView textView = rootView.findViewById(R.id.title);
+            final PictureSearchTool.ImgBean imgBean = dataList.get(position);
+            final ImageView imageView = rootView.findViewById(R.id.image);
             imageView.setPadding(5, 5, 5, 5);
             Glide.with(SelectFileActivity.this)
                     .load(new File(imgBean.getFirstImgPath()))
                     .centerCrop().into(imageView);
-            textView.setText(new File(imgBean.getPath()).getName());
+            TextView textView = rootView.findViewById(R.id.title);
+            if (imgBean.isImg()) {
+                textView.setVisibility(View.GONE);
+                checkBox.setVisibility(View.VISIBLE);
+                if (selectHashMap != null) {
+                    Boolean aBoolean = selectHashMap.get(position);
+                    checkBox.setOnCheckedChangeListener(null);
+                    checkBox.setChecked(aBoolean == null ? false : aBoolean);
+                    checkBox.setOnCheckedChangeListener(getListener());
+
+                }
+            } else {
+                checkBox.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(new File(imgBean.getPath()).getName());
+            }
+
+            checkBox.setTag(position);
+            rootView.setTag(imgBean);
+            checkBox.setOnCheckedChangeListener(getListener());
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PictureSearchTool.ImgBean imgBean1 = (PictureSearchTool.ImgBean) v.getTag();
+                    if (imgBean1.isImg()) {
+                        //show img
+                        mTitle.setText("");
+                        Intent intent = new Intent(SelectFileActivity.this, ImageShowActivity.class);
+                        intent.putExtra("path", imgBean1.getFirstImgPath());
+                        startActivity(intent);
+                    } else {
+                        mTitle.setText(new File(imgBean1.getPath()).getName());
+                        handleFolderImg(imgBean1);
+                        Log.i(TAG, "onClick: " + imgBean1.getPath());
+                    }
+                }
+            });
+
+        }
+
+        private CompoundButton.OnCheckedChangeListener getListener() {
+            return new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    selectHashMap.put((int) buttonView.getTag(), isChecked);
+                }
+            };
         }
 
         @Override
         public int getItemCount() {
-            if (imgList == null) return 0;
-            return imgList.size();
+            if (dataList == null) return 0;
+            return dataList.size();
         }
     };
+
+    private void handleFolderImg(PictureSearchTool.ImgBean imgBean) {
+        selectHashMap = new HashMap<>();
+        dataList.removeAll(dataList);
+        dataList.addAll(pictureSearchTool.searchFolder(imgBean.getPath()));
+        isPath = false;
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onClick(back);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

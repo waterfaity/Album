@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class BaseResponse<T> {
     int code;
     String message;
+    T data;
 
     public int getCode() {
         return code;
@@ -25,5 +26,8 @@ public class BaseResponse<T> {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+    public T getData(){
+        return data;
     }
 }

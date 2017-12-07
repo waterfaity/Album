@@ -72,4 +72,8 @@ public class ShareTool {
         return   sharedPreferences.getLong(USER_ID, 0);
 
     }
+
+    public void saveUserId(int userId) {
+        sharedPreferences.edit().putInt(USER_ID, userId).apply();
+    }
 }

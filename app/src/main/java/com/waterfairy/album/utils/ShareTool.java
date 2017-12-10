@@ -18,6 +18,7 @@ public class ShareTool {
     public static final String ACCOUNT = "account";
     public static final String PASSWORD = "password";
     public static final String USER_ID = "userId";
+    public static final String ADDRESS = "address";
     public static final String SETTING = "setting";
     private SharedPreferences sharedPreferences;
 
@@ -59,6 +60,9 @@ public class ShareTool {
     public void savePassword(String password) {
         sharedPreferences.edit().putString(PASSWORD, password).apply();
     }
+    public void saveAddress(String address) {
+        sharedPreferences.edit().putString(ADDRESS, address).apply();
+    }
 
     public String getAccount() {
         return sharedPreferences.getString(ACCOUNT, "");
@@ -69,7 +73,12 @@ public class ShareTool {
     }
 
     public long getUserId() {
-        return   sharedPreferences.getLong(USER_ID, 0);
+        return sharedPreferences.getInt(USER_ID, 0);
+
+    }
+
+    public String getAddress() {
+        return sharedPreferences.getString(ADDRESS, "");
 
     }
 

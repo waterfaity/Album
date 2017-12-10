@@ -14,6 +14,16 @@ public class UserBean {
     private String password;
     private String tel;
     private String username;
+    private String address;
+    private int pos;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public int getId() {
         return id;
@@ -45,5 +55,13 @@ public class UserBean {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
+    public int getPos() {
+        return pos;
     }
 }

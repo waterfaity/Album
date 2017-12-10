@@ -23,13 +23,25 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.waterfairy.album.R;
+import com.waterfairy.album.http.HttpConfig;
+import com.waterfairy.album.http.RetrofitService;
+import com.waterfairy.album.utils.ShareTool;
+import com.waterfairy.http.callback.BaseCallback;
+import com.waterfairy.http.client.RetrofitHttpClient;
+import com.waterfairy.http.response.BaseResponse;
 import com.waterfairy.utils.PictureSearchTool;
 import com.waterfairy.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class SelectFileActivity extends AppCompatActivity implements PictureSearchTool.OnSearchListener, View.OnClickListener {
 
@@ -38,7 +50,7 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
     private Dialog dialog;
     private PictureSearchTool pictureSearchTool;
     private TextView textView;
-    private ImageView back, refresh;
+    private ImageView back, upload;
     private int currentDeep;
     private List<String> deepList;
     private List<PictureSearchTool.ImgBean> imgPathList;
@@ -58,9 +70,10 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         back = findViewById(R.id.back);
-        refresh = findViewById(R.id.upload);
+        upload = findViewById(R.id.upload);
+        upload.setVisibility(View.GONE);
         back.setOnClickListener(this);
-        refresh.setOnClickListener(this);
+        upload.setOnClickListener(this);
         deepList = new ArrayList<>();
         imgPathList = new ArrayList<>();
         widthImg = getResources().getDisplayMetrics().widthPixels / 3;
@@ -116,6 +129,8 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
                     dataList.removeAll(dataList);
                     dataList.addAll(imgPathList);
                     adapter.notifyDataSetChanged();
+                    mTitle.setText("");
+                    upload.setVisibility(View.GONE);
                 }
                 break;
             case R.id.upload:
@@ -127,7 +142,24 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
     private void upload() {
         if (selectHashMap.size() == 0) ToastUtils.show("还没有选择图片");
         else {
+            Set<Integer> integers = selectHashMap.keySet();
+            ArrayList<String> stringList = new ArrayList<>();
+            for (Integer position : integers) {
+                Boolean aBoolean = selectHashMap.get(position);
+                if (aBoolean != null) {
+                    stringList.add(dataList.get(position).getFirstImgPath());
+                }
+            }
 
+            if (stringList.size() == 0) {
+                ToastUtils.show("还没有选择图片");
+            } else {
+
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("data", stringList);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
         }
     }
 
@@ -190,6 +222,7 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
                     } else {
                         mTitle.setText(new File(imgBean1.getPath()).getName());
                         handleFolderImg(imgBean1);
+                        upload.setVisibility(View.VISIBLE);
                         Log.i(TAG, "onClick: " + imgBean1.getPath());
                     }
                 }
@@ -229,4 +262,5 @@ public class SelectFileActivity extends AppCompatActivity implements PictureSear
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

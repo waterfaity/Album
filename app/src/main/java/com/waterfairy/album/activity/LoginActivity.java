@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initData() {
         userDBDao = DataBaseManger.getInstance().getDaoSession().getUserDBDao();
-
     }
 
     public void login(View view) {
@@ -56,25 +55,38 @@ public class LoginActivity extends AppCompatActivity {
             ToastUtils.show("请输入密码");
             return;
         }
-        RetrofitHttpClient.build(HttpConfig.BASE_URL, true, true)
-                .getRetrofit().create(RetrofitService.class)
-                .login(account, password).enqueue(new BaseCallback<BaseResponse<UserBean>>() {
-            @Override
-            public void onSuccess(BaseResponse<UserBean> baseResponse) {
-                ToastUtils.show("登录成功");
-                UserBean data = baseResponse.getData();
-                ShareTool.getInstance().saveAccount(account);
-                ShareTool.getInstance().savePassword(password);
-                ShareTool.getInstance().saveUserId(data.getId());
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                finish();
-            }
 
-            @Override
-            public void onFailed(int code, String message) {
-                ToastUtils.show(message);
-            }
-        });
+        if (TextUtils.equals(account, "admin") && TextUtils.equals(password, "admin")) {
+            //系统管理员
+            ShareTool.getInstance().saveAccount(account);
+            ShareTool.getInstance().savePassword(password);
+            ShareTool.getInstance().saveUserId(0);
+            startActivity(new Intent(LoginActivity.this, ManagerActivity.class));
+            finish();
+        } else {
+            //普通用户登录
+            RetrofitHttpClient.build(HttpConfig.BASE_URL, true, true)
+                    .getRetrofit().create(RetrofitService.class)
+                    .login(account, password).enqueue(new BaseCallback<BaseResponse<UserBean>>() {
+                @Override
+                public void onSuccess(BaseResponse<UserBean> baseResponse) {
+                    ToastUtils.show("登录成功");
+                    UserBean data = baseResponse.getData();
+                    ShareTool.getInstance().saveAccount(account);
+                    ShareTool.getInstance().savePassword(password);
+                    ShareTool.getInstance().saveUserId(data.getId());
+                    ShareTool.getInstance().savePassword(data.getAddress());
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void onFailed(int code, String message) {
+                    ToastUtils.show(message);
+                }
+            });
+        }
+
     }
 
     public void register(View view) {

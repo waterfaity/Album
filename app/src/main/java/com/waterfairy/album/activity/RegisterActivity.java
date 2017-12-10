@@ -63,11 +63,16 @@ public class RegisterActivity extends AppCompatActivity {
             ToastUtils.show("请输入确认密码");
             return;
         }
+        if (!TextUtils.equals(password, ensurePassword)) {
+            ToastUtils.show("两次密码输入不一致");
+            return;
+        }
         RetrofitService retrofitService = RetrofitHttpClient.build(HttpConfig.BASE_URL, true, true).getRetrofit().create(RetrofitService.class);
         retrofitService.regist(userName, password, tel).enqueue(new BaseCallback<BaseResponse>() {
             @Override
             public void onSuccess(BaseResponse baseResponse) {
                 ToastUtils.show("注册成功");
+                finish();
             }
 
             @Override

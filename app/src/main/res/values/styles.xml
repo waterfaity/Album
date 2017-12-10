@@ -24,6 +24,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
     <style name="WeekStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:button">@drawable/check_box_week</item>
     </style>

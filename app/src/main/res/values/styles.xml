@@ -24,6 +24,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NoActionBaLightr" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorActionBar</item>
+        <item name="colorButtonNormal">@color/colorLogin</item>
+        <item name="colorPrimaryDark">@color/colorActionBar</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 
     <style name="WeekStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:button">@drawable/check_box_week</item>

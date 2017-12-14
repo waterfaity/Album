@@ -38,6 +38,7 @@ public class PictureSearchTool {
     }
 
     public void start() {
+        running=true;
         fileList.removeAll(fileList);
         startAsyncTask();
 
@@ -81,7 +82,6 @@ public class PictureSearchTool {
 
 
     private void search(File file, int deep, OnSearchListener onSearchListener) {
-        Log.i(TAG, "search: " + deep);
         if (file.exists() && deep < this.deep) {
             File[] list = file.listFiles();
             if (list != null) {
@@ -125,7 +125,6 @@ public class PictureSearchTool {
                 }
             }
         }
-        Log.i(TAG, "searchFolder: " + imgBeans.size());
         return imgBeans;
     }
 
@@ -147,9 +146,27 @@ public class PictureSearchTool {
             this.isImg = isImg;
         }
 
+        private boolean open;
+        private int pos;
         private boolean isImg;
         private String path;
         private String firstImgPath;
+
+        public boolean isOpen() {
+            return open;
+        }
+
+        public void setOpen(boolean open) {
+            this.open = open;
+        }
+
+        public int getPos() {
+            return pos;
+        }
+
+        public void setPos(int pos) {
+            this.pos = pos;
+        }
 
         public String getPath() {
             return path;
@@ -175,5 +192,9 @@ public class PictureSearchTool {
 
             this.firstImgPath = firstImgPath;
         }
+    }
+
+    public boolean isRunning(){
+        return isRunning();
     }
 }

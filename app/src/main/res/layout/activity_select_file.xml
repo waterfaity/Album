@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.waterfairy.album.activity.SelectFileActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:orientation="vertical"
+                                                 tools:context="com.waterfairy.album.activity.SelectFileActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="56dp">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="56dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -22,12 +21,12 @@
 
                 <ImageView
                     android:id="@+id/back"
-                    android:layout_width="?attr/actionBarSize"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
                     android:scaleType="fitStart"
-                    android:src="@mipmap/back" />
+                    android:src="@mipmap/back"/>
 
                 <TextView
                     android:id="@+id/title"
@@ -35,17 +34,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/back"
-                    android:textColor="@color/colorWhite" />
+                    android:text="文件夹"
+                    android:textColor="@color/colorWhite"/>
 
-                <ImageView
-                    android:id="@+id/upload"
-                    android:layout_width="?attr/actionBarSize"
-                    android:layout_height="?attr/actionBarSize"
+
+                <Button
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/bt_ensure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_alignParentRight="true"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@android:drawable/ic_menu_upload" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text="未选择"/>
 
             </RelativeLayout>
 
@@ -57,5 +58,5 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_marginTop="56dp"/>
 </android.support.design.widget.CoordinatorLayout>

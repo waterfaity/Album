@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                app_package_name: applicationId]
+
     }
     buildTypes {
         release {
@@ -46,6 +49,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:26.1.0'
     //photoView 图片view
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
+
 }
 greendao {
     schemaVersion 1
